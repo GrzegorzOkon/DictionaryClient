@@ -26,6 +26,8 @@ public class DictionaryClientView extends Application {
     private TextArea poleWyszukiwania;
     private Button pobierzT³umaczenie;
 
+    Connection po³¹czenie;
+    
     // =============================================================================
     
     private void prepareScene(Stage primaryStage) {    
@@ -68,9 +70,13 @@ public class DictionaryClientView extends Application {
         	if (poleJêzyków.getSelectionModel().isEmpty() == false) {
         		
         		if (walidujDane(polePortów.getText())) {
+        			po³¹czenie = new Connection();
+        			
+        			po³¹czenie.wyœlijWiadomoœæ(poleJêzyków.getSelectionModel().getSelectedItem().toString() + "," + poleWyszukiwania.getText());
         			wyœwietlTekst("");
+        			
+        			poleWyszukiwania.setText(po³¹czenie.odbierzWiadomoœæ());
         		}
-        		//wyœwietlRaport(new Service().getWeather(poleMiast.getSelectionModel().getSelectedItem()));
         	}
 		});
          
