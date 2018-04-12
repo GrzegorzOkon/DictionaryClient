@@ -69,13 +69,15 @@ public class DictionaryClientView extends Application {
         pobierzT³umaczenie.setOnAction((event) -> {	
         	if (poleJêzyków.getSelectionModel().isEmpty() == false) {
         		
-        		if (walidujDane(polePortów.getText())) {
-        			po³¹czenie = new Connection();
+        		String portKlienta = polePortów.getText();
+        		
+        		if (walidujDaneWejœciowe(portKlienta)) {
         			
-        			po³¹czenie.wyœlijWiadomoœæ(poleJêzyków.getSelectionModel().getSelectedItem().toString() + "," + poleWyszukiwania.getText());
-        			wyœwietlTekst("");
+        			po³¹czenie = new Connection(this);
+        			po³¹czenie.zarezerwujPort(Integer.valueOf(portKlienta));
+        			po³¹czenie.start();
         			
-        			poleWyszukiwania.setText(po³¹czenie.odbierzWiadomoœæ());
+        			po³¹czenie.wyœlijWiadomoœæ(poleJêzyków.getSelectionModel().getSelectedItem().toString() + "," + poleWyszukiwania.getText() + "," + portKlienta);
         		}
         	}
 		});
@@ -107,7 +109,7 @@ public class DictionaryClientView extends Application {
 
     // =============================================================================
     
-    private boolean walidujDane(String portNiezweryfikowany) {
+    private boolean walidujDaneWejœciowe(String portNiezweryfikowany) {
     	
     	try {
     		
