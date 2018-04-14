@@ -13,7 +13,10 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
-
+/**
+ * Klasa tworzy interfejs u¿ytkownika w javafx oraz przeprowadza wstêpn¹ walidacjê wprowadzonych danych
+ * 
+ */
 public class DictionaryClientView extends Application { 
 	
     private Scene scena; 
@@ -50,7 +53,7 @@ public class DictionaryClientView extends Application {
         kontenerSiatki.add(poleJêzyków, 0, 1);
         kontenerSiatki.add(new Label("Port:"), 1, 0);
         kontenerSiatki.add(polePortów, 1, 1);     
-        kontenerSiatki.setPadding(new Insets(0, 0, 10, 0));  // tworzy odstêp pod kontenerem
+        kontenerSiatki.setPadding(new Insets(0, 0, 10, 0)); 
         
         kontenerGlowny.setTop(kontenerSiatki);
         
@@ -58,7 +61,7 @@ public class DictionaryClientView extends Application {
         kontenerGlowny.setCenter(poleWyszukiwania);
         
         konternerDolny = new BorderPane();
-        konternerDolny.setPadding(new Insets(10, 0, 0, 0));  // tworzy odstêp nad kontenerem
+        konternerDolny.setPadding(new Insets(10, 0, 0, 0)); 
         
         kontenerPrzyciskow = new HBox(16);
         
@@ -66,16 +69,16 @@ public class DictionaryClientView extends Application {
         
         kontenerPrzyciskow.getChildren().add(pobierzT³umaczenie);
         
-        pobierzT³umaczenie.setOnAction((event) -> {	
-        	if (poleJêzyków.getSelectionModel().isEmpty() == false) {
+        pobierzT³umaczenie.setOnAction((event) -> {   //przypisuje dzia³anie do przycisku
+        	if (poleJêzyków.getSelectionModel().isEmpty() == false) {	//je¿eli zosta³ dokonany wybór jêzyka
         		
         		String portKlienta = polePortów.getText();
         		
-        		if (walidujDaneWejœciowe(portKlienta)) {
+        		if (walidujDaneWejœciowe(portKlienta)) {	//sprawdza poprawnoœæ numeru portu na wejœciu
         			
         			po³¹czenie = new Connection(this);
-        			po³¹czenie.zarezerwujPort(Integer.valueOf(portKlienta));
-        			po³¹czenie.start();
+        			po³¹czenie.zarezerwujPort(Integer.valueOf(portKlienta));	//tworzy serwer nasluchuj¹cy odpowiedzi
+        			po³¹czenie.start();	  //uruchamia serwer w nowym w¹tku
         			
         			po³¹czenie.wyœlijWiadomoœæ(poleJêzyków.getSelectionModel().getSelectedItem().toString() + "," + poleWyszukiwania.getText() + "," + portKlienta);
         		}
@@ -107,8 +110,13 @@ public class DictionaryClientView extends Application {
           launch(args);
     }
 
-    // =============================================================================
-    
+    /**
+     * Waliduje dane wejœciowe - sprawdza czy wpisano liczbê z zakresu 49152 - 65535
+     * 
+     * @param portNiezweryfikowany tekst wpisany w polu portu
+     * 
+     * @return true dla poprawnego numeru portu - liczba w podanym zakresie, w przeciwnym razie false
+     */
     private boolean walidujDaneWejœciowe(String portNiezweryfikowany) {
     	
     	try {
@@ -130,6 +138,11 @@ public class DictionaryClientView extends Application {
     	return false;
     }
     
+    /**
+     * Wyœwietla tekst w oknie interfejsu
+     * 
+     * @param tekst tekst do wyœwietlenia
+     */
 	public void wyœwietlTekst(String tekst) {
 		
 		poleWyszukiwania.clear();
